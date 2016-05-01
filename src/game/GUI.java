@@ -16,12 +16,12 @@ import javax.swing.SwingConstants;
 public class GUI extends JFrame implements KeyListener{
 	
 
-	Game gameob = new Game();
-	JFrame frame = new JFrame("2048");
-	JPanel panel = new JPanel();
-	HashMap<Integer, int[]> keyToDirection = new HashMap<Integer, int[]>();
+	private Game gameob = new Game();
+	private JFrame frame = new JFrame("2048");
+	private JPanel panel = new JPanel();
+	private HashMap<Integer, int[]> keyToDirection = new HashMap<Integer, int[]>();
 	
-	GUI(){
+	private GUI(){
 		setSize(550, 550);
 		setTitle("2048");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,12 +43,12 @@ public class GUI extends JFrame implements KeyListener{
 		gui.setVisible(true);
 	}
 	
-	void startGame(){
+	private void startGame(){
 		gameob.spawnBlock();
 		gameob.spawnBlock();
 	}
 	
-	void drawGrid(){
+	private void drawGrid(){
 		
 		for (int[] line : gameob.getGrid()){
 			for (int column : line){
@@ -65,7 +65,7 @@ public class GUI extends JFrame implements KeyListener{
 		}
 	}
 
-	int getFontsize(int number){
+	private int getFontsize(int number){
 		// finds fitting font size to display the number
 		if (number < 100){
 			return 125;
@@ -92,7 +92,7 @@ public class GUI extends JFrame implements KeyListener{
 		}
 		
 	}
-	void update(){
+	private void update(){
 		panel.removeAll();
 		drawGrid();
 		invalidate();

@@ -11,7 +11,7 @@ public class Game {
 	final int[] UP = {0, -1};
 	final int[] DOWN = {0, 1};
 	
-	Game(){
+	public Game(){
 		// set up empty board
 		for (int i = 0; i < SIZE; i++){
 			for (int j = 0; j < SIZE; j++){
@@ -19,7 +19,7 @@ public class Game {
 			}
 		}
 	}
-	boolean move(int[] direction){
+	public boolean move(int[] direction){
 		// move grid in given direction
 		int[][] originalGrid= deepCopy(grid);
 		int[][] startPoints = genStartPoints(direction);
@@ -31,7 +31,7 @@ public class Game {
 		return !Arrays.deepEquals(grid, originalGrid);
 	}
 	
-	boolean move(int[] direction, int[][] inputGrid){
+	public boolean move(int[] direction, int[][] inputGrid){
 		// move given grid in given direction, returns if the Grid changed
 		int[][] originalGrid= deepCopy(inputGrid);
 		int[][] startPoints = genStartPoints(direction);
@@ -111,7 +111,7 @@ public class Game {
 		return output;
 	}
 	
-	boolean spawnBlock(){
+	public boolean spawnBlock(){
 		// spawns new number at random location
 		int rand1;
 		int rand2;
@@ -129,7 +129,7 @@ public class Game {
 		return false;
 		
 	}
-	boolean isfull(){
+	private boolean isfull(){
 		// checks if there are free positions in the grid
 		for (int i = 0; i < SIZE; i++){
 			for (int j = 0; j < SIZE; j++){
@@ -140,7 +140,7 @@ public class Game {
 		}
 		return true;
 	}
-	boolean isLost(){
+	public boolean isLost(){
 		// checks if the game is lost
 		int[][] originalGrid = deepCopy(grid);
 		int[][] directions = {UP, DOWN, RIGHT, LEFT};
