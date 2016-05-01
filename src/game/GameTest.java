@@ -8,9 +8,9 @@ import org.junit.Test;
 
 public class GameTest {
 	final int[] RIGHT = {1, 0};
-	final int[] LEFT = {1, 0};
-	final int[] DOWN = {0, 1};
+	final int[] LEFT = {-1, 0};
 	final int[] UP = {0, -1};
+	final int[] DOWN = {0, 1};
 	
 	Game gameob = new Game();
 	@Test
@@ -45,23 +45,16 @@ public class GameTest {
 		int[] inp3 = {0, 1}; 
 		int[] inp4 = {0, -1}; 
 		
-		int[][] outp1 = {{0, 0}, {0, 1}, {0, 2}, {0, 3}};
-		int[][] outp2 = {{3, 0}, {3, 1}, {3, 2}, {3, 3}};
-		int[][] outp3 = {{0, 0}, {1, 0}, {2, 0}, {3, 0}};
-		int[][] outp4 = {{0, 3}, {1, 3}, {2, 3}, {3, 3}};
+		int[][] outp1 = {{3, 0}, {3, 1}, {3, 2}, {3, 3}};
+		int[][] outp2 = {{0, 0}, {0, 1}, {0, 2}, {0, 3}};
+		int[][] outp3 = {{0, 3}, {1, 3}, {2, 3}, {3, 3}};
+		int[][] outp4 = {{0, 0}, {1, 0}, {2, 0}, {3, 0}};
+
 		
 		assertTrue(Arrays.deepEquals(outp1, gameob.genStartPoints(inp1)));
 		assertTrue(Arrays.deepEquals(outp2, gameob.genStartPoints(inp2)));
 		assertTrue(Arrays.deepEquals(outp3, gameob.genStartPoints(inp3)));
 		assertTrue(Arrays.deepEquals(outp4, gameob.genStartPoints(inp4)));
-	}
-	
-	@Test
-	public void genLine(){
-		int[] dir1 = {1, 0};
-		int[] start1 = {0, 1};
-		int[] output1 = {0, 0, 0, 0};
-		assertTrue(Arrays.equals(output1, gameob.genLine(start1, dir1)));
 	}
 	
 	@Test
@@ -78,8 +71,48 @@ public class GameTest {
 				{32, 16, 4, 0},
 				{32, 8, 0, 0}
 		};
-		gameob.setGrid(board);
+		int[][] outcomeRight = {
+				{0, 0, 2, 8},
+				{0, 0, 0, 4},
+				{0, 32, 16, 4},
+				{0, 0, 32, 8}
+		};
+		int[][] outcomeDown = {
+				{0, 0, 0, 0},
+				{0, 0, 4, 0},
+				{0, 4, 16, 4},
+				{2, 64, 4, 8}
+		};
+		int[][] outcomeUp = {
+				{2, 4, 4, 8},
+				{0, 64, 16, 4},
+				{0, 0, 4, 0},
+				{0, 0, 0, 0}
+		};
+		gameob.setGrid(deepcopy(board));
+		System.out.println(gameob.getGrid()[0][0]);
 		gameob.move(LEFT);
 		assertTrue(Arrays.deepEquals(outcomeLeft, gameob.getGrid()));
+		
+		gameob.setGrid(deepcopy(board));
+		System.out.println(gameob.getGrid()[0][0]);
+		gameob.move(RIGHT);
+		assertTrue(Arrays.deepEquals(outcomeRight, gameob.getGrid()));
+		
+		gameob.setGrid(deepcopy(board));
+		gameob.move(DOWN);
+		assertTrue(Arrays.deepEquals(outcomeDown, gameob.getGrid()));
+	
+		gameob.setGrid(board);
+		gameob.move(UP);
+		assertTrue(Arrays.deepEquals(outcomeUp, gameob.getGrid()));
+	
+	}
+	private int[][] deepcopy(int[][] board){
+		int[][] newGrid = new int[4][4];
+		for (int i = 0; i < 4; i++){
+			newGrid[i] = board[i].clone();
+		}
+		return newGrid;
 	}
 }

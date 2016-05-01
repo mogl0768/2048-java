@@ -3,7 +3,7 @@ package game;
 
 public class Game {
 
-	public int[][] grid = new int[4][4];
+	private int[][] grid = new int[4][4];
 	final int SIZE = 4;
 
 	
@@ -26,8 +26,12 @@ public class Game {
 	}
 	
 	int[][] genStartPoints(int[] direction){
-		int x = direction[0] < 0 ? SIZE - 1 : 0;
-		int y = direction[1] < 0 ? SIZE - 1 : 0;
+		/* Generate coordinates which help to merge the line later. 
+		 * They are stored as {x, y} and represent the start points 
+		 * to generate the array which will later be merged.
+		 */
+		int x = direction[0] > 0 ? SIZE - 1 : 0;
+		int y = direction[1] > 0 ? SIZE - 1 : 0;
 		int moveX = direction[0] != 0 ? 0 : 1;
 		int moveY = direction[1] != 0 ? 0 : 1;
 		int[][] output = new int[SIZE][2];
@@ -42,24 +46,27 @@ public class Game {
 	}
 	
 	int[] genLine(int[] start, int[] direction){
+		// gets all corresponding values given a start point and a direction
 		int[] output = new int[SIZE];
 		for (int i = 0;  i < SIZE; i++){
-			int x = start[0] + direction[0] * i; 
-			int y = start[1] + direction[1] * i;
+			int x = start[0] - direction[0] * i; 
+			int y = start[1] - direction[1] * i;
 			output[i] = grid[y][x];
 		}
 		return output;
 	}
 
 	void setLine(int[] start, int[] direction, int[] line){
+		// sets the given values at the given positions
 		for (int i = 0;  i < SIZE; i++){
-			int x = start[0] + direction[0] * i; 
-			int y = start[1] + direction[1] * i;
+			int x = start[0] - direction[0] * i; 
+			int y = start[1] - direction[1] * i;
 			grid[y][x] = line[i];
 		}
 	}
 	
 	int[] merge(int[] numbers) {
+		// merges the given array to the left side
 		int valueBuffer = 0;
 		int[] output = {0, 0, 0, 0};
 		int outputInd = 0;
@@ -82,16 +89,19 @@ public class Game {
 		return output;
 	}
 	
-	boolean spawn_block(){
+	boolean spawnBlock(){
+		// spawns new number at random location
 		int rand1;
 		int rand2;
 		if (!isfinished()){
 			do{
-			rand1 = (int) Math.random() * 5 ;
-			rand2 = (int) Math.random() * 5 ;
+			rand1 = (int) (Math.random() * 4) ;
+			rand2 = (int) (Math.random() * 4) ;
+			System.out.printf("--%d %d \n", rand1, rand2);
 			if (grid[rand1][rand2] == 0){
 				boolean fourOrTwo = Math.random() <= 0.75;
 				grid[rand1][rand2] = fourOrTwo ? 2 : 4;
+				System.out.printf("--%d %d \n", rand1, rand2);
 				return true;
 			}
 			} while (grid[rand1][rand2] != 0);
