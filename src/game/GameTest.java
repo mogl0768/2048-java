@@ -89,17 +89,17 @@ public class GameTest {
 				{0, 0, 4, 0},
 				{0, 0, 0, 0}
 		};
-		gameob.setGrid(deepcopy(board));
+		gameob.setGrid(Game.deepCopy(board));
 		System.out.println(gameob.getGrid()[0][0]);
 		gameob.move(LEFT);
 		assertTrue(Arrays.deepEquals(outcomeLeft, gameob.getGrid()));
 		
-		gameob.setGrid(deepcopy(board));
+		gameob.setGrid(Game.deepCopy(board));
 		System.out.println(gameob.getGrid()[0][0]);
 		gameob.move(RIGHT);
 		assertTrue(Arrays.deepEquals(outcomeRight, gameob.getGrid()));
 		
-		gameob.setGrid(deepcopy(board));
+		gameob.setGrid(Game.deepCopy(board));
 		gameob.move(DOWN);
 		assertTrue(Arrays.deepEquals(outcomeDown, gameob.getGrid()));
 	
@@ -107,12 +107,5 @@ public class GameTest {
 		gameob.move(UP);
 		assertTrue(Arrays.deepEquals(outcomeUp, gameob.getGrid()));
 	
-	}
-	private int[][] deepcopy(int[][] board){
-		int[][] newGrid = new int[4][4];
-		for (int i = 0; i < 4; i++){
-			newGrid[i] = board[i].clone();
-		}
-		return newGrid;
 	}
 }

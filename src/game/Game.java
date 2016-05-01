@@ -1,5 +1,6 @@
 package game;
 
+import java.util.Arrays;
 
 public class Game {
 
@@ -15,14 +16,16 @@ public class Game {
 			}
 		}
 	}
-	void move(int[] direction){
+	boolean move(int[] direction){
 		// move grid in given direction
+		int[][] originalGrid= deepCopy(grid);
 		int[][] startPoints = genStartPoints(direction);
 		for (int[] point:startPoints) {
 			int [] line = genLine(point, direction);
 			int [] newline = merge(line);
 			setLine(point, direction, newline);	
 		}
+		return !Arrays.deepEquals(grid, originalGrid);
 	}
 	
 	int[][] genStartPoints(int[] direction){
@@ -110,14 +113,22 @@ public class Game {
 		
 	}
 	boolean isfinished(){
-		for (int i = 0; i < 5; i++){
-			for (int j = 0; j < 5; j++){
+		for (int i = 0; i < SIZE; i++){
+			for (int j = 0; j < SIZE; j++){
 				if (grid[i][j] == 0){
 					return false;
 				}
 			}
 		}
 		return true;
+	}
+	public static int[][] deepCopy(int[][] board){
+		// makes deep copy of two-dimensional Array
+		int[][] newGrid = new int[4][4];
+		for (int i = 0; i < 4; i++){
+			newGrid[i] = board[i].clone();
+		}
+		return newGrid;
 	}
 	public void setGrid(int[][] inputGrid){
 		grid = inputGrid;
