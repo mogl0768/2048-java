@@ -90,12 +90,10 @@ public class GameTest {
 				{0, 0, 0, 0}
 		};
 		gameob.setGrid(Game.deepCopy(board));
-		System.out.println(gameob.getGrid()[0][0]);
 		gameob.move(LEFT);
 		assertTrue(Arrays.deepEquals(outcomeLeft, gameob.getGrid()));
 		
 		gameob.setGrid(Game.deepCopy(board));
-		System.out.println(gameob.getGrid()[0][0]);
 		gameob.move(RIGHT);
 		assertTrue(Arrays.deepEquals(outcomeRight, gameob.getGrid()));
 		

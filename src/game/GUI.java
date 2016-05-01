@@ -15,27 +15,24 @@ import javax.swing.SwingConstants;
 
 public class GUI extends JFrame implements KeyListener{
 	
-	final int[] RIGHT = {1, 0};
-	final int[] LEFT = {-1, 0};
-	final int[] UP = {0, -1};
-	final int[] DOWN = {0, 1};
+
 	Game gameob = new Game();
 	JFrame frame = new JFrame("2048");
 	JPanel panel = new JPanel();
 	HashMap<Integer, int[]> keyToDirection = new HashMap<Integer, int[]>();
 	
-	public GUI(){
+	GUI(){
 		setSize(550, 550);
 		setTitle("2048");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(panel);
 		panel.setLayout(new GridLayout(0, 4));
 		addKeyListener(this);
-		
-		keyToDirection.put(37, LEFT);
-		keyToDirection.put(38, UP);
-		keyToDirection.put(39, RIGHT);
-		keyToDirection.put(40, DOWN);
+		// Map keys and directions:
+		keyToDirection.put(37, gameob.LEFT);
+		keyToDirection.put(38, gameob.UP);
+		keyToDirection.put(39, gameob.RIGHT);
+		keyToDirection.put(40, gameob.DOWN);
 	}
 	public static void main(String[] args){
 		
@@ -55,29 +52,52 @@ public class GUI extends JFrame implements KeyListener{
 		
 		for (int[] line : gameob.getGrid()){
 			for (int column : line){
+				// Only show number if it is not zero
 				String displayedNumber = column != 0 ? String.valueOf(column) : "";
+		
 				JLabel label = new JLabel(displayedNumber, SwingConstants.CENTER);
 				label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-				label.setFont(new Font("TimesRoman", Font.PLAIN, 125));
+				
+				int fontSize = getFontsize(column);
+				label.setFont(new Font("TimesRoman", Font.PLAIN, fontSize));
 				panel.add(label);
 			}
 		}
 	}
 
+	int getFontsize(int number){
+		// finds fitting font size to display the number
+		if (number < 100){
+			return 125;
+		} if (number < 1000){
+			return 80;
+		} else {
+			return 50;
+		}
+	}
 
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		if (keyToDirection.containsKey(key) &&
 				gameob.move(keyToDirection.get(key))){
 			
-			panel.removeAll();
 			gameob.spawnBlock();
-			drawGrid();
-			invalidate();
-			validate();
-			repaint();
+			update();
+		}
+		if (gameob.isLost()){
+			System.out.println("You lost!");
+			gameob = new Game();
+			startGame();
+			update();
 		}
 		
+	}
+	void update(){
+		panel.removeAll();
+		drawGrid();
+		invalidate();
+		validate();
+		repaint();
 	}
 
 	public void keyReleased(KeyEvent arg0){}
