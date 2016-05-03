@@ -19,7 +19,8 @@ public class GUI extends JFrame implements KeyListener{
 	private Game gameob = new Game();
 	private JFrame frame = new JFrame("2048");
 	private JPanel panel = new JPanel();
-	private HashMap<Integer, int[]> keyToDirection = new HashMap<Integer, int[]>();
+	private HashMap<Integer, Direction> keyToDirection = new HashMap<Integer, Direction>();
+	final int SIZE = 4;
 	
 	private GUI(){
 		setSize(550, 550);
@@ -29,14 +30,13 @@ public class GUI extends JFrame implements KeyListener{
 		panel.setLayout(new GridLayout(0, 4));
 		addKeyListener(this);
 		// Map keys and directions:
-		keyToDirection.put(37, gameob.LEFT);
-		keyToDirection.put(38, gameob.UP);
-		keyToDirection.put(39, gameob.RIGHT);
-		keyToDirection.put(40, gameob.DOWN);
+		keyToDirection.put(37, Direction.LEFT);
+		keyToDirection.put(38, Direction.UP);
+		keyToDirection.put(39, Direction.RIGHT);
+		keyToDirection.put(40, Direction.DOWN);
 	}
 	public static void main(String[] args){
-		
-
+		System.out.println(Direction.RIGHT.otherDimension());
 		GUI gui = new GUI();
 		gui.startGame();
 		gui.drawGrid();
@@ -49,11 +49,11 @@ public class GUI extends JFrame implements KeyListener{
 	}
 	
 	private void drawGrid(){
-		
-		for (int[] line : gameob.getGrid()){
-			for (int column : line){
+		for (int row = 0; row < SIZE; row++){
+			for (int column = 0; column < SIZE; column++){
 				// Only show number if it is not zero
-				String displayedNumber = column != 0 ? String.valueOf(column) : "";
+				int value = gameob.getGridValue(column, row);
+				String displayedNumber = value != 0 ? String.valueOf(value) : "";
 		
 				JLabel label = new JLabel(displayedNumber, SwingConstants.CENTER);
 				label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -103,7 +103,5 @@ public class GUI extends JFrame implements KeyListener{
 	public void keyReleased(KeyEvent arg0){}
 
 	public void keyTyped(KeyEvent arg0){}
-	
-
 
 }
