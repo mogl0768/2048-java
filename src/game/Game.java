@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Game {
 	
-	final int SIZE = 4;
+	final static int SIZE = 4;
 	Grid gameGrid = new Grid(SIZE);
 	Random random = new Random();
 	

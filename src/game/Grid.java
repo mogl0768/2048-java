@@ -48,10 +48,6 @@ public class Grid {
 		return output;
 	}
 	
-	public int[][] getGrid(){
-		return grid;
-	}
-	
 	public void setLine(int[] point, Direction direction, int[] line){
 		int linePos = 0;
 		for (int[] pos : genPositions(point, direction)){
@@ -93,7 +89,7 @@ public class Grid {
 			return false;
 		}
 		Grid otherGrid = (Grid) obj;
-		return Arrays.deepEquals(grid, otherGrid.getGrid());
+		return Arrays.deepEquals(grid, otherGrid.grid);
 	}
 	
 	public int hashCode(){

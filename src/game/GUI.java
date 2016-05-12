@@ -13,34 +13,69 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class GUI extends JFrame implements KeyListener{
+public class GUI{
 	
 
 	private Game gameob = new Game();
-	private JFrame frame = new JFrame("2048");
-	private JPanel panel = new JPanel();
-	private HashMap<Integer, Direction> keyToDirection = new HashMap<Integer, Direction>();
-	final int SIZE = 4;
+	private final JFrame frame = new JFrame("2048");
+	private final JPanel panel = new JPanel();
+	private static final HashMap<Integer, Direction> keyToDirection = new HashMap<Integer, Direction>();
+	private JLabel[][] labels;
+	static{
+		// Map keys and directions:
+		keyToDirection.put(KeyEvent.VK_LEFT, Direction.LEFT);
+		keyToDirection.put(KeyEvent.VK_UP, Direction.UP);
+		keyToDirection.put(KeyEvent.VK_RIGHT, Direction.RIGHT);
+		keyToDirection.put(KeyEvent.VK_DOWN, Direction.DOWN);
+	}
+	
 	
 	private GUI(){
-		setSize(550, 550);
-		setTitle("2048");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		add(panel);
+		frame.setSize(550, 550);
+		frame.setTitle("2048");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.add(panel);
 		panel.setLayout(new GridLayout(0, 4));
-		addKeyListener(this);
-		// Map keys and directions:
-		keyToDirection.put(37, Direction.LEFT);
-		keyToDirection.put(38, Direction.UP);
-		keyToDirection.put(39, Direction.RIGHT);
-		keyToDirection.put(40, Direction.DOWN);
+		initLabels();
+		frame.addKeyListener(new KeyListener(){
+			public void keyPressed(KeyEvent e) {
+				int key = e.getKeyCode();
+				if (keyToDirection.containsKey(key) &&
+						gameob.move(keyToDirection.get(key))){
+					
+					gameob.spawnBlock();
+					update();
+				}
+				if (gameob.isLost()){
+					System.out.println("You lost!");
+					gameob = new Game();
+					startGame();
+					update();
+				}
+				
+			}
+			public void keyReleased(KeyEvent e) {}
+			public void keyTyped(KeyEvent e) {}	
+		});
+		
+
 	}
+	private void initLabels(){
+		labels = new JLabel[Game.SIZE][Game.SIZE];
+		for (int y = 0; y < Game.SIZE; y++){
+			for (int x = 0; x < Game.SIZE; x++){
+				labels[y][x] = new JLabel("", SwingConstants.CENTER);
+				labels[y][x].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				panel.add(labels[y][x]);
+			}
+		}
+	}
+	
 	public static void main(String[] args){
-		System.out.println(Direction.RIGHT.otherDimension());
 		GUI gui = new GUI();
 		gui.startGame();
 		gui.drawGrid();
-		gui.setVisible(true);
+		gui.frame.setVisible(true);
 	}
 	
 	private void startGame(){
@@ -49,18 +84,17 @@ public class GUI extends JFrame implements KeyListener{
 	}
 	
 	private void drawGrid(){
-		for (int row = 0; row < SIZE; row++){
-			for (int column = 0; column < SIZE; column++){
+		for (int row = 0; row < Game.SIZE; row++){
+			for (int column = 0; column < Game.SIZE; column++){
+				JLabel label = labels[row][column];
 				// Only show number if it is not zero
 				int value = gameob.getGridValue(column, row);
 				String displayedNumber = value != 0 ? String.valueOf(value) : "";
-		
-				JLabel label = new JLabel(displayedNumber, SwingConstants.CENTER);
-				label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				label.setText(displayedNumber);
 				
-				int fontSize = getFontsize(column);
+				int fontSize = getFontsize(value);
 				label.setFont(new Font("TimesRoman", Font.PLAIN, fontSize));
-				panel.add(label);
+
 			}
 		}
 	}
@@ -75,33 +109,9 @@ public class GUI extends JFrame implements KeyListener{
 			return 50;
 		}
 	}
-
-	public void keyPressed(KeyEvent e) {
-		int key = e.getKeyCode();
-		if (keyToDirection.containsKey(key) &&
-				gameob.move(keyToDirection.get(key))){
-			
-			gameob.spawnBlock();
-			update();
-		}
-		if (gameob.isLost()){
-			System.out.println("You lost!");
-			gameob = new Game();
-			startGame();
-			update();
-		}
 		
-	}
 	private void update(){
-		panel.removeAll();
 		drawGrid();
-		invalidate();
-		validate();
-		repaint();
+		frame.repaint();
 	}
-
-	public void keyReleased(KeyEvent arg0){}
-
-	public void keyTyped(KeyEvent arg0){}
-
 }
